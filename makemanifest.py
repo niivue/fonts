@@ -5,7 +5,7 @@ import json
 
 def main():
     if len(sys.argv) != 2:
-        print("Usage: python makemanifest.py /path/to/pngs")
+        print("Usage: python makemanifest.py /path/to/jsons")
         sys.exit(1)
 
     folder = sys.argv[1]
@@ -16,11 +16,15 @@ def main():
 
     manifest_path = os.path.join(folder, "manifest.json")
 
-    # List *.png files, excluding manifest.json
+    # List *.json files (excluding manifest.json) and strip extension
     files = [
-        f for f in os.listdir(folder)
-        if f.endswith(".png")
+        os.path.splitext(f)[0]
+        for f in os.listdir(folder)
+        if f.endswith(".json") and f != "manifest.json"
     ]
+
+    # Sort alphabetically
+    files.sort()
 
     # Write manifest
     with open(manifest_path, "w") as f:
